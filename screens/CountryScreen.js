@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl, StyleSheet, Text, SafeAreaView, Dimensions } from 'react-native';
 
 export default function CountryScreen() {
@@ -12,9 +12,23 @@ export default function CountryScreen() {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-
+        fetchUSData();
         setRefreshing(false);
     }, []);
+
+    useEffect(() => {
+        fetchUSData();
+    }, []);
+
+    const fetchUSData = () => {
+        fetch('https://api.covidtracking.com/v1/us/current.json')
+          .then((response) => response.json())
+          .then((json) => {setConfirmed(json[0].positive);
+            setTested(json[0].totalTestResults);
+            setRecovered(json[0].recovered);
+            setDeath(json[0].death)})
+          .catch((error) => console.error(error));
+    };
 
     return (
         <SafeAreaView style={styles.container}>
