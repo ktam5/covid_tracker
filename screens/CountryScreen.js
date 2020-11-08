@@ -3,13 +3,10 @@ import { View, ScrollView, RefreshControl, StyleSheet, Text, SafeAreaView, Dimen
 
 export default function CountryScreen() {
     const [refreshing, setRefreshing] = useState(false);
-
-    const width = Dimensions.get('window').width;
     const [confirmed, setConfirmed] = useState(0);
     const [death, setDeath] = useState(0);
     const [tested, setTested] = useState(0);
     const [hospitalized, setHospitalized] = useState(0);
-
     const [confirmedIncrease, setConfirmedIncrease] = useState(0);
     const [deathIncrease, setDeathIncrease] = useState(0);
     const [testedIncrease, setTestedIncrease] = useState(0);
@@ -47,7 +44,7 @@ export default function CountryScreen() {
                 contentContainerStyle={styles.scrollView}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 <Text style={styles.title}>Covid-19 (US)</Text>
-                <View style={{ width: width, height: width, flexDirection: 'row' }}>
+                <View style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, flexDirection: 'row' }}>
                     <View>
                         <View style={[styles.boxes, { backgroundColor: '#9999ff' }]}>
                             <Text style={styles.word}>Tested</Text>
@@ -73,7 +70,7 @@ export default function CountryScreen() {
                         </View>
                     </View>
                 </View>
-                <View style={[styles.boxes, { backgroundColor: 'yellow', width: 300}]}>
+                <View style={[styles.boxes, { backgroundColor: 'yellow', width: 300, height: 100}]}>
                     <Text style={styles.word}>Positivity Rate</Text>
                     <Text style={styles.number}>{Math.round(100 * confirmedIncrease/testedIncrease)}%</Text>
                 </View>
@@ -93,7 +90,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 40,
         fontWeight: 'bold',
-        margin: 40,
+        margin: 20,
     },
     boxes: {
         width: Dimensions.get('window').width / 2 * .85,
