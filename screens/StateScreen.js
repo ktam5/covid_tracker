@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 
 export default function StateScreen() {
     const [refreshing, setRefreshing] = useState(false);
-    const [usState, setUsState] = useState('Illinois');
+    const [usState, setUsState] = useState('IL');
     const [confirmed, setConfirmed] = useState(0);
     const [death, setDeath] = useState(0);
     const [tested, setTested] = useState(0);
@@ -14,29 +14,34 @@ export default function StateScreen() {
     const [testedIncrease, setTestedIncrease] = useState(0);
     const [hospitalizedIncrease, setHospitalizedIncrease] = useState(0);
 
-    const onRefresh = React.useCallback(() => {
+    const onRefresh = () => {
         setRefreshing(true);
-        //fetchUSData();
-        setUsState('dumbo')
+        setUsState(usState);
+        fetchStateData(usState);
         setRefreshing(false);
-    }, []);
+    };
 
     useEffect(() => {
-        fetchUSData();
+        setUsState(usState);
+        fetchStateData(usState);
     }, []);
 
-    const fetchUSData = () => {
-        fetch('https://api.covidtracking.com/v1/us/current.json')
+    const fetchStateData = (s) => {
+        fetch('https://api.covidtracking.com/v1/states/current.json')
             .then((response) => response.json())
             .then((json) => {
-                setConfirmed(json[0].positive);
-                setTested(json[0].totalTestResults);
-                setHospitalized(json[0].hospitalized);
-                setDeath(json[0].death);
-                setConfirmedIncrease(json[0].positiveIncrease);
-                setTestedIncrease(json[0].totalTestResultsIncrease);
-                setHospitalizedIncrease(json[0].hospitalizedIncrease);
-                setDeathIncrease(json[0].deathIncrease);
+                for (const i of json) {
+                    if (i.state == s) {
+                        i.positive == null ? setConfirmed(0) : setConfirmed(i.positive);
+                        i.totalTestResults == null ? setTested(0) : setTested(i.totalTestResults);
+                        i.hospitalized == null ? setHospitalized(0) : setHospitalized(i.hospitalized);
+                        i.death == null ? setDeath(0) : setDeath(i.death);
+                        i.positiveIncrease == null ? setConfirmedIncrease(0) : setConfirmedIncrease(i.positiveIncrease);
+                        i.totalTestResultsIncrease == null ? setTestedIncrease(0) : setTestedIncrease(i.totalTestResultsIncrease);
+                        i.hospitalizedIncrease == null ? setHospitalizedIncrease(0) : setHospitalizedIncrease(i.hospitalizedIncrease);
+                        i.deathIncrease == null ? setDeathIncrease(0) : setDeathIncrease(i.deathIncrease);
+                    }
+                }
             })
             .catch((error) => console.error(error));
     };
@@ -46,23 +51,64 @@ export default function StateScreen() {
                 contentContainerStyle={styles.scrollView}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 <Text style={styles.title}>Covid-19 ({usState})</Text>
-                <View style={{height: 200}}>
+                <View style={{height: 260}}>
                     <Picker
                         selectedValue={usState}
-                        style={{ height: 20, width: 100 }}
-                        onValueChange={(itemValue, itemIndex) =>
-                            setUsState(itemValue)
-                        }>
-                        <Picker.Item label="Illinois" value="illinois" />
-                        <Picker.Item label="Kansas" value="kansas" />
-                        <Picker.Item label="Illinois" value="illinois" />
-                        <Picker.Item label="Kansas" value="kansas" />
-                        <Picker.Item label="Illinois" value="illinois" />
-                        <Picker.Item label="Kansas" value="kansas" />
-                        <Picker.Item label="Illinois" value="illinois" />
-                        <Picker.Item label="Kansas" value="kansas" />
-                        <Picker.Item label="Illinois" value="illinois" />
-                        <Picker.Item label="Kansas" value="kansas" />
+                        style={{ height: 20, width: Dimensions.get('window').width }}
+                        onValueChange={(itemValue, itemIndex) => {
+                            setUsState(itemValue);
+                            fetchStateData(itemValue);
+                        }}>
+                        <Picker.Item label="Alabama" value="AL" />
+                        <Picker.Item label="Alaska" value="AK" />
+                        <Picker.Item label="Arizona" value="AZ" />
+                        <Picker.Item label="Arkansas" value="AR" />
+                        <Picker.Item label="California" value="CA" />
+                        <Picker.Item label="Colorado" value="CO" />
+                        <Picker.Item label="Conneticut" value="CT" />
+                        <Picker.Item label="Delaware" value="DE" />
+                        <Picker.Item label="Florida" value="FL" />
+                        <Picker.Item label="Georgia" value="GA" />
+                        <Picker.Item label="Hawaii" value="HI" />
+                        <Picker.Item label="Idaho" value="ID" />
+                        <Picker.Item label="Illinois" value="IL" />
+                        <Picker.Item label="Indiana" value="IN" />
+                        <Picker.Item label="Iowa" value="IA" />
+                        <Picker.Item label="Kansas" value="KS" />
+                        <Picker.Item label="Kentucky" value="KY" />
+                        <Picker.Item label="Louisiana" value="LA" />
+                        <Picker.Item label="Maine" value="ME" />
+                        <Picker.Item label="Maryland" value="MD" />
+                        <Picker.Item label="Massachusetts" value="MA" />
+                        <Picker.Item label="Michigan" value="MI" />
+                        <Picker.Item label="Minnesota" value="MN" />
+                        <Picker.Item label="Mississippi" value="MS" />
+                        <Picker.Item label="Missouri" value="MO" />
+                        <Picker.Item label="Montana" value="MT" />
+                        <Picker.Item label="Nebraska" value="NE" />
+                        <Picker.Item label="Nevada" value="NV" />
+                        <Picker.Item label="New Hamsphire" value="NH" />
+                        <Picker.Item label="New Jersey" value="NJ" />
+                        <Picker.Item label="New Mexico" value="NM" />
+                        <Picker.Item label="New York" value="NY" />
+                        <Picker.Item label="North Carolina" value="NC" />
+                        <Picker.Item label="North Dakota" value="ND" />
+                        <Picker.Item label="Ohio" value="OH" />
+                        <Picker.Item label="Oklahoma" value="OK" />
+                        <Picker.Item label="Oregon" value="OR" />
+                        <Picker.Item label="Pensylvania" value="PA" />
+                        <Picker.Item label="Rhode Island" value="RI" />
+                        <Picker.Item label="South Carolina" value="SC" />
+                        <Picker.Item label="South Dakota" value="SD" />
+                        <Picker.Item label="Tennessee" value="TN" />
+                        <Picker.Item label="Texas" value="TX" />
+                        <Picker.Item label="Utah" value="UT" />
+                        <Picker.Item label="Vermont" value="VT" />
+                        <Picker.Item label="Virginia" value="VA" />
+                        <Picker.Item label="Washington" value="WA" />
+                        <Picker.Item label="West Virgina" value="WV" />
+                        <Picker.Item label="Wisconsin" value="WI" />
+                        <Picker.Item label="Wyoming" value="WY" />
                     </Picker>
                 </View>
                 <View style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, flexDirection: 'row' }}>
@@ -91,10 +137,6 @@ export default function StateScreen() {
                         </View>
                     </View>
                 </View>
-                {/*<View style={[styles.boxes, { backgroundColor: 'yellow', width: 300, height: 100 }]}>
-                    <Text style={styles.word}>Positivity Rate</Text>
-                    <Text style={styles.number}>{Math.round(100 * confirmedIncrease / testedIncrease)}%</Text>
-                    </View>*/}
             </ScrollView>
         </SafeAreaView>
     );

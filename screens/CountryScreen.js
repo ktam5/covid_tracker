@@ -44,6 +44,14 @@ export default function CountryScreen() {
                 contentContainerStyle={styles.scrollView}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 <Text style={styles.title}>Covid-19 (US)</Text>
+                <View style={[styles.boxes, { backgroundColor: 'yellow', width: 300, height: 100 }]}>
+                    <Text style={styles.word}>Positivity Rate</Text>
+                    <Text style={styles.number}>{Math.round(10000 * confirmedIncrease / testedIncrease) / 100}%</Text>
+                </View>
+                <View style={[styles.boxes, { backgroundColor: '#FF33FF', width: 300, height: 100 }]}>
+                    <Text style={styles.word}>Mortality Rate</Text>
+                    <Text style={styles.number}>{Math.round(10000 * death / confirmed) / 100}%</Text>
+                </View>
                 <View style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width, flexDirection: 'row' }}>
                     <View>
                         <View style={[styles.boxes, { backgroundColor: '#9999ff' }]}>
@@ -69,10 +77,6 @@ export default function CountryScreen() {
                             <Text style={styles.number}>{death.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
                         </View>
                     </View>
-                </View>
-                <View style={[styles.boxes, { backgroundColor: 'yellow', width: 300, height: 100}]}>
-                    <Text style={styles.word}>Positivity Rate</Text>
-                    <Text style={styles.number}>{Math.round(100 * confirmedIncrease/testedIncrease)}%</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
